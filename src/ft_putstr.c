@@ -6,23 +6,27 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:49:15 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/19 13:49:46 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/20 10:12:43 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void	ft_putstr(const char *s)
+int	ft_putstr(const char *s, int fd)
 {
-	size_t	i;
+	int	i;
 
 	if (!s)
 		s = "(null)";
 	i = 0;
 	while (s[i] != '\0')
 	{
-		write(1, &s[i], 1);
+		if (write(fd, &s[i], 1) == -1)
+			return (-1);
 		i++;
 	}
-	write(1, "\n", 1);
+	if (write(1, "\n", 1) == -1)
+		return (-1);
+	i++;
+	return (i);
 }
