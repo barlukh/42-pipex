@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:49:15 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/20 10:12:43 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/20 10:23:10 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_putstr(const char *s, int fd)
 {
-	int	i;
+	size_t	i;
 
 	if (!s)
 		s = "(null)";
@@ -28,5 +28,5 @@ int	ft_putstr(const char *s, int fd)
 	if (write(1, "\n", 1) == -1)
 		return (-1);
 	i++;
-	return (i);
+	return ((int)i);
 }
