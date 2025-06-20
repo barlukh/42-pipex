@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:40:15 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/20 10:19:03 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/20 10:25:41 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ static void		*ft_free_array(char **s_arr, size_t i);
 
 char	**ft_split(char const *s, char c)
 {
-	size_t	word_count;
 	char	**s_arr;
+	size_t	word_count;
 
 	if (!s)
 		return (NULL);

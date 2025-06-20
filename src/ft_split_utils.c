@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:46:45 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/19 13:55:39 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/20 10:27:13 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ size_t	ft_strlen(const char *s)
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	size_t	s_len;
+	char	*subs;
 	size_t	i;
-	size_t	substr_len;
-	char	*substr;
+	size_t	s_len;
+	size_t	subs_len;
 
 	if (!s)
 		return (NULL);
@@ -55,23 +55,23 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	if (i >= s_len)
 		return (ft_strdup(""));
 	else if (s_len - i >= len)
-		substr_len = len;
+		subs_len = len;
 	else
-		substr_len = s_len - i;
-	substr = malloc(sizeof(char) * (substr_len + 1));
-	if (!substr)
+		subs_len = s_len - i;
+	subs = malloc(sizeof(char) * (subs_len + 1));
+	if (!subs)
 		return (NULL);
-	ft_memcpy(substr, s + i, substr_len);
-	substr[substr_len] = '\0';
-	return (substr);
+	ft_memcpy(subs, s + i, subs_len);
+	subs[subs_len] = '\0';
+	return (subs);
 }
 
 // Duplicates a string using dynamic memory allocation.
 static char	*ft_strdup(const char *s)
 {
-	size_t	s_len;
 	char	*new_s;
 	size_t	i;
+	size_t	s_len;
 
 	s_len = ft_strlen(s);
 	new_s = malloc(sizeof(char) * (s_len + 1));
@@ -86,8 +86,8 @@ static char	*ft_strdup(const char *s)
 // Copies bytes from one memory area to another.
 static void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	unsigned char		*p_dest;
 	const unsigned char	*p_src;
+	unsigned char		*p_dest;
 	size_t				i;
 
 	p_dest = (unsigned char *)dest;
