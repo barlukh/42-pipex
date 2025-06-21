@@ -6,14 +6,14 @@
 #    By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/18 11:37:07 by bgazur            #+#    #+#              #
-#    Updated: 2025/06/19 14:03:52 by bgazur           ###   ########.fr        #
+#    Updated: 2025/06/21 11:05:00 by bgazur           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME =		pipex
 BONUS =		pipex_bonus
 CC =		cc
-CFLAGS =	-Wall -Werror -Wextra -Iinclude
+CFLAGS =	-Wall -Werror -Wextra
 RM =		rm -f
 
 INC_DIR =	include
@@ -24,21 +24,24 @@ SRC_DIR =	src
 HDR =		$(INC_DIR)/pipex.h
 HDR_B =		$(INC_DIR)/pipex_bonus.h
 
-OBJS =		$(SRCS:%.c=$(OBJ_DIR)/%.o)
-OBJS_B =	$(SRCS_B:%.c=$(OBJ_DIR_B)/%.o)
+OBJ =		$(SRC:%.c=$(OBJ_DIR)/%.o)
+OBJ_B =		$(SRC_B:%.c=$(OBJ_DIR_B)/%.o)
 
-SRCS =		ft_putstr.c \
+SRC =		cleanup.c \
+			errors.c \
+			ft_putstr.c \
 			ft_split_utils.c \
 			ft_split.c \
-			main.c
+			main.c \
+			processes.c
 
-SRCS_B =	main.c
+SRC_B =		main.c
 
-$(NAME): $(OBJ_DIR) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+$(NAME): $(OBJ_DIR) $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-$(BONUS): $(OBJ_DIR_B) $(OBJS_B)
-	$(CC) $(CFLAGS) $(OBJS_B) -o $(BONUS)
+$(BONUS): $(OBJ_DIR_B) $(OBJ_B)
+	$(CC) $(CFLAGS) $(OBJ_B) -o $(BONUS)
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
@@ -57,7 +60,7 @@ all: $(OBJ_DIR) $(OBJ_DIR_B) $(NAME) $(BONUS)
 bonus: $(OBJ_DIR_B) $(BONUS)
 
 clean:
-	$(RM) $(OBJS) $(OBJS_B)
+	$(RM) $(OBJ) $(OBJ_B)
 
 fclean: clean
 	$(RM) $(NAME) $(BONUS)

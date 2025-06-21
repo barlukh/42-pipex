@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr.c                                        :+:      :+:    :+:   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/19 13:49:15 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/21 09:45:37 by bgazur           ###   ########.fr       */
+/*   Created: 2025/06/21 10:38:18 by bgazur            #+#    #+#             */
+/*   Updated: 2025/06/21 11:01:33 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-int	ft_putstr(const char *s, int fd)
+void	close_pipes(size_t count, t_processes *prcs)
 {
 	size_t	i;
 
-	if (!s)
-		s = "(null)";
 	i = 0;
-	while (s[i] != '\0')
+	while (i < count)
 	{
-		if (write(fd, &s[i], 1) == -1)
-			return (-1);
+		close(prcs->pipefd[i][0]);
+		close(prcs->pipefd[i][1]);
 		i++;
 	}
-	if (write(1, "\n", 1) == -1)
-		return (-1);
-	i++;
-	return ((int)i);
 }
