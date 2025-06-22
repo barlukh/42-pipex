@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:32:46 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/22 15:10:28 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/22 15:49:01 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	create_children(int argc, char **argv, t_processes *prcs)
 	while (i < argc - 3)
 	{
 		prcs->child[i] = fork();
-		if (prcs->child[i] == (pid_t)(-1))
+		if (prcs->child[i] == (pid_t)(ERROR))
 			return (EXIT_FAILURE);
 		else if (prcs->child[i] == (pid_t)0)
 		{

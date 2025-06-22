@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:56:36 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/22 15:00:06 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/22 15:51:38 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ static int	child_first_fds(char **argv, t_processes *prcs)
 	int	fd;
 
 	fd = open(argv[1], O_RDONLY);
-	if (fd == -1)
+	if (fd == ERROR)
 	{
 		close_pipe(prcs);
 		return (EXIT_FAILURE);
 	}
-	if (dup2(fd, STDIN_FILENO) == -1
-		|| dup2(prcs->pipefd[1], STDOUT_FILENO) == -1)
+	if (dup2(fd, STDIN_FILENO) == ERROR
+		|| dup2(prcs->pipefd[1], STDOUT_FILENO) == ERROR)
 	{
 		close_pipe(prcs);
 		close(fd);
@@ -57,13 +57,13 @@ static int	child_last_fds(int argc, char **argv, t_processes *prcs)
 	int	fd;
 
 	fd = open(argv[argc - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	if (fd == -1)
+	if (fd == ERROR)
 	{
 		close_pipe(prcs);
 		return (EXIT_FAILURE);
 	}
-	if (dup2(prcs->pipefd[0], STDIN_FILENO) == -1
-		|| dup2(fd, STDOUT_FILENO) == -1)
+	if (dup2(prcs->pipefd[0], STDIN_FILENO) == ERROR
+		|| dup2(fd, STDOUT_FILENO) == ERROR)
 	{
 		close_pipe(prcs);
 		close(fd);

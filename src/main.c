@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:24:30 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/22 14:47:21 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/22 15:48:30 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(int argc, char **argv, char **env)
 
 	if (argc != 5)
 		return (print_user_errno(22));
-	if (pipe(prcs.pipefd) == -1)
+	if (pipe(prcs.pipefd) == ERROR)
 		return (print_system_errno());
 	if (create_children(argc, argv, &prcs) == EXIT_FAILURE)
 		return (print_system_errno());
