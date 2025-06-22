@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 11:39:58 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/21 11:04:27 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/22 13:49:33 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,25 +22,25 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/wait.h>
 # include <unistd.h>
 
 //------------------------------------------------------------------------------
 // Macro Definitions
 //------------------------------------------------------------------------------
 
-# define STDERR 2
 
 //------------------------------------------------------------------------------
 // Type Definitions
 //------------------------------------------------------------------------------
 
 /** Variables for handling processes.
- * @param pipfd Array of pipes.
+ * @param pipfd Pipe (pipefd[0] read end, pipefd[1] write end).
  * @param child Array of child processes.
  */
 typedef struct s_processes
 {
-	int		(*pipefd)[2];
+	int		pipefd[2];
 	pid_t	*child;
 }	t_processes;
 
@@ -48,25 +48,13 @@ typedef struct s_processes
 // Function Prototypes
 //------------------------------------------------------------------------------
 
-/** Closes all opened pipes.
- * @param count Number of pipes opened.
- * @param prcs Variables for handling processes.
- */
-void	close_pipes(size_t count, t_processes *prcs);
-
 /** Creates all child processes.
  * @param argc Argument count.
+ * @param argv Argument vector.
  * @param prcs Variables for handling processes.
  * @return EXIT_SUCCESS or EXIT_FAILURE.
  */
-int		create_children(int argc, t_processes *prcs);
-
-/** Creates all pipes.
- * @param argc Argument count.
- * @param prcs Variables for handling processes.
- * @return EXIT_SUCCESS or EXIT_FAILURE.
- */
-int		create_pipes(int argc, t_processes *prcs);
+int		create_children(int argc, char **argv, t_processes *prcs);
 
 /** Prints an error message of the current errno.
  * @return Errno.
