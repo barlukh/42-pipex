@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 11:39:58 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/22 15:48:20 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/22 16:54:37 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,18 @@
 // Type Definitions
 //------------------------------------------------------------------------------
 
+/** Command line arguments.
+ * @param argc Argument count.
+ * @param argv Argument vector.
+ * @param env Environmental variables.
+ */
+typedef struct s_arguments
+{
+	int		argc;
+	char	**argv;
+	char	**env
+}	t_arguments;
+
 /** Variables for handling processes.
  * @param pipfd Pipe (pipefd[0] read end, pipefd[1] write end).
  * @param child Array of child processes.
@@ -50,28 +62,27 @@ typedef struct s_processes
 // Function Prototypes
 //------------------------------------------------------------------------------
 
+/** Executes a command from the argument vector, replacing the child process.
+ * @param args Command line arguments.
+ * @param prcs Variables for handling processes.
+ * @param i Index of a child process (argument).
+ */
+int		child_execute(t_arguments args, t_processes *prcs, size_t i);
+
 /** Sets redirection of file descriptors for a child process.
  * @param argc Argument count.
  * @param argv Argument vector.
- * @param i Index of a child process (argument).
  * @param prcs Variables for handling processes.
+ * @param i Index of a child process (argument).
  * @return EXIT_SUCCESS or EXIT_FAILURE.
  */
-int		child_fds(int argc, char **argv, size_t i, t_processes *prcs);
+int		child_set_fds(int argc, char **argv, t_processes *prcs, size_t i);
 
 /** Closes both ends of a pipe.
  * @param prcs Variables for handling processes.
  * @return None.
  */
 void	close_pipe(t_processes *prcs);
-
-/** Creates all child processes.
- * @param argc Argument count.
- * @param argv Argument vector.
- * @param prcs Variables for handling processes.
- * @return EXIT_SUCCESS or EXIT_FAILURE.
- */
-int		create_children(int argc, char **argv, t_processes *prcs);
 
 /** Prints an error message of the current errno.
  * @return Errno.

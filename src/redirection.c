@@ -6,31 +6,32 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:56:36 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/22 15:51:38 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/22 16:41:30 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-static int	child_first_fds(char **argv, t_processes *prcs);
-static int	child_last_fds(int argc, char **argv, t_processes *prcs);
+static int	child_first_set_fds(char **argv, t_processes *prcs);
+static int	child_last_set_fds(int argc, char **argv, t_processes *prcs);
 
-int	child_fds(int argc, char **argv, size_t i, t_processes *prcs)
+int	child_set_fds(int argc, char **argv, t_processes *prcs, size_t i)
 {
 	if (i == 0)
 	{
-		if (child_first_fds(argv, prcs) == EXIT_FAILURE)
+		if (child_first_set_fds(argv, prcs) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 	}
 	else if (i == argc - 4)
 	{
-		if (child_last_fds(argc, argv, prcs) == EXIT_FAILURE)
+		if (child_last_set_fds(argc, argv, prcs) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }
 
-static int	child_first_fds(char **argv, t_processes *prcs)
+// Sets file descriptors of the first child process (argument).
+static int	child_first_set_fds(char **argv, t_processes *prcs)
 {
 	int	fd;
 
@@ -52,7 +53,8 @@ static int	child_first_fds(char **argv, t_processes *prcs)
 	return (EXIT_SUCCESS);
 }
 
-static int	child_last_fds(int argc, char **argv, t_processes *prcs)
+// Sets file descriptors of the last child process (argument).
+static int	child_last_set_fds(int argc, char **argv, t_processes *prcs)
 {
 	int	fd;
 
