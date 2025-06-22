@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 11:39:58 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/22 13:49:33 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/22 15:09:23 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 // Macro Definitions
 //------------------------------------------------------------------------------
 
+# define OFFSET 2
 
 //------------------------------------------------------------------------------
 // Type Definitions
@@ -47,6 +48,21 @@ typedef struct s_processes
 //------------------------------------------------------------------------------
 // Function Prototypes
 //------------------------------------------------------------------------------
+
+/** Sets redirection of file descriptors for a child process.
+ * @param argc Argument count.
+ * @param argv Argument vector.
+ * @param i Index of a child process (argument).
+ * @param prcs Variables for handling processes.
+ * @return EXIT_SUCCESS or EXIT_FAILURE.
+ */
+int		child_fds(int argc, char **argv, size_t i, t_processes *prcs);
+
+/** Closes both ends of a pipe.
+ * @param prcs Variables for handling processes.
+ * @return None.
+ */
+void	close_pipe(t_processes *prcs);
 
 /** Creates all child processes.
  * @param argc Argument count.
