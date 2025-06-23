@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 11:39:58 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/23 13:09:12 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/23 13:14:35 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,10 @@ int		child_execute(char **argv, char**env, int i);
 int		child_set_fds(int argc, char **argv, int *pipefd, int i);
 
 /** Frees memory allocated by ft_split().
- * @param arg Allocated array of strings.
+ * @param arr Allocated array of strings.
  * @return None.
  */
-void	free_split(char **arg);
+void	free_split(char **arr);
 
 /** Copies bytes from one memory area to another; the areas must not overlap.
  * @param dest Pointer to the destination memory area.
