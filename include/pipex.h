@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 11:39:58 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/23 12:48:35 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/23 13:09:12 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	free_split(char **arg);
 
 /** Copies bytes from one memory area to another; the areas must not overlap.
  * @param dest Pointer to the destination memory area.
- * @param src Pointer to the source memory area..
+ * @param src Pointer to the source memory area.
  * @param n Number of bytes to copy.
  * @return Pointer to the destination memory area.
  */
@@ -135,9 +135,9 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 /** Waits for children processes to finish.
  * @param argc Argument count.
  * @param child Array of child processes.
- * @return None.
+ * @return Termination status of the last process.
  */
-void	parent_wait(int argc, pid_t *child);
+int		parent_wait(int argc, pid_t *child);
 
 /** Prints an error message of the current errno.
  * @return Errno.
