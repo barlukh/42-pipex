@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:32:46 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/23 15:55:32 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/23 16:06:58 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	child_execute(char **argv, char**env, int i)
 	return (EXIT_SUCCESS);
 }
 
+// Finds if the passed cmd has an executable path in env.
 static char	*find_path(char *cmd, char **env)
 {
 	char	**paths_split;
@@ -56,6 +57,7 @@ static char	*find_path(char *cmd, char **env)
 	return (path_final);
 }
 
+// Checks if PATH exists in env.
 static char	*check_env(char **env)
 {
 	size_t	i;
@@ -70,6 +72,7 @@ static char	*check_env(char **env)
 	return (NULL);
 }
 
+// Builds the executable path and checks its access rights.
 static char	*build_path(char **paths_split, char *cmd)
 {
 	char	*temp;
