@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:24:30 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/23 12:53:25 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/23 13:38:04 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static int	fork_exec(t_arguments args, pid_t **child, int *pipefd);
 int	main(int argc, char **argv, char **env)
 {
 	int			pipefd[2];
+	int			status;
 	pid_t		*child;
 	t_arguments	args;
 
@@ -28,13 +29,16 @@ int	main(int argc, char **argv, char **env)
 		return (print_user_errno(22));
 	if (pipe(pipefd) == ERROR)
 		return (print_system_errno());
+	child = malloc(sizeof(pid_t) * (args.argc - 3));
+	if (child == NULL)
+		return (print_user_errno(12));
 	if (fork_exec(args, &child, pipefd) == EXIT_FAILURE)
 		return (print_system_errno());
 	close(pipefd[0]);
 	close(pipefd[1]);
-	parent_wait(argc, child);
+	status = parent_wait(argc, child);
 	free(child);
-	return (EXIT_SUCCESS);
+	return (status);
 }
 
 // Main function for operating child processes.
@@ -42,9 +46,6 @@ static int	fork_exec(t_arguments args, pid_t **child, int *pipefd)
 {
 	int	i;
 
-	*child = malloc(sizeof(pid_t) * (args.argc - 3));
-	if (*child == NULL)
-		return (EXIT_FAILURE);
 	i = 0;
 	while (i < args.argc - 3)
 	{

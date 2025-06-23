@@ -6,7 +6,7 @@
 #    By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/18 11:37:07 by bgazur            #+#    #+#              #
-#    Updated: 2025/06/23 12:38:40 by bgazur           ###   ########.fr        #
+#    Updated: 2025/06/23 15:01:08 by bgazur           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,13 @@ SRC =		exit.c \
 			redirection.c \
 			utils.c
 
-SRC_B =		main.c
+SRC_B =		exit.c \
+			execution.c \
+			ft_split_utils.c \
+			ft_split.c \
+			main.c \
+			redirection.c \
+			utils.c
 
 $(NAME): $(OBJ_DIR) $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
