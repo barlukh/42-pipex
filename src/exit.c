@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:47:32 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/23 10:09:04 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/23 13:13:36 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,15 @@ int	print_user_errno(int err)
 	return (errno);
 }
 
-void	free_split(char **arg)
+void	free_split(char **arr)
 {
 	size_t	i;
 
 	i = 0;
-	while (arg[i] != NULL)
+	while (arr[i] != NULL)
 	{
-		free(arg[i]);
+		free(arr[i]);
 		i++;
 	}
-	free(arg);
+	free(arr);
 }
