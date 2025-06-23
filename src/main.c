@@ -6,60 +6,56 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:24:30 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/22 16:48:11 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/23 12:53:25 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-static int	fork_exec(t_arguments args, t_processes *prcs);
+static int	fork_exec(t_arguments args, pid_t **child, int *pipefd);
 
 int	main(int argc, char **argv, char **env)
 {
-	int			status;
-	size_t		i;
+	int			pipefd[2];
+	pid_t		*child;
 	t_arguments	args;
-	t_processes	prcs;
 
-	if (argc != 5)
-		return (print_user_errno(22));
-	if (pipe(prcs.pipefd) == ERROR)
-		return (print_system_errno());
+	child = NULL;
 	args.argc = argc;
 	args.argv = argv;
 	args.env = env;
-	if (fork_exec(args, &prcs) == EXIT_FAILURE)
+	if (argc != 5)
+		return (print_user_errno(22));
+	if (pipe(pipefd) == ERROR)
 		return (print_system_errno());
-	i = 0;
-	while (i < argc - 3)
-	{
-		waitpid(prcs.child[i], &status, 0);
-		i++;
-	}
-	close_pipe(&prcs);
-	free(prcs.child);
+	if (fork_exec(args, &child, pipefd) == EXIT_FAILURE)
+		return (print_system_errno());
+	close(pipefd[0]);
+	close(pipefd[1]);
+	parent_wait(argc, child);
+	free(child);
 	return (EXIT_SUCCESS);
 }
 
 // Main function for operating child processes.
-static int	fork_exec(t_arguments args, t_processes *prcs)
+static int	fork_exec(t_arguments args, pid_t **child, int *pipefd)
 {
-	size_t	i;
+	int	i;
 
-	prcs->child = malloc(sizeof(pid_t) * (args.argc - 3));
-	if (prcs->child == NULL)
+	*child = malloc(sizeof(pid_t) * (args.argc - 3));
+	if (*child == NULL)
 		return (EXIT_FAILURE);
 	i = 0;
 	while (i < args.argc - 3)
 	{
-		prcs->child[i] = fork();
-		if (prcs->child[i] == (pid_t)(ERROR))
+		(*child)[i] = fork();
+		if ((*child)[i] == (pid_t)(ERROR))
 			return (EXIT_FAILURE);
-		else if (prcs->child[i] == (pid_t)0)
+		else if ((*child)[i] == (pid_t)0)
 		{
-			if (child_set_fds(args.argc, args.argv, prcs, i) == EXIT_FAILURE)
+			if (child_set_fds(args.argc, args.argv, pipefd, i) == EXIT_FAILURE)
 				return (EXIT_FAILURE);
-			if (child_execute(args, prcs, i) == EXIT_FAILURE)
+			if (child_execute(args.argv, args.env, i) == EXIT_FAILURE)
 				return (EXIT_FAILURE);
 		}
 		i++;

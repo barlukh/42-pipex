@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr.c                                        :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:49:15 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/22 15:51:11 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/23 12:45:48 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,50 @@ int	ft_putstr(const char *s, int fd)
 		return (ERROR);
 	i++;
 	return ((int)i);
+}
+
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n && (s1[i] != '\0' || s2[i] != '\0'))
+	{
+		if ((unsigned char)s1[i] != (unsigned char)s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
+	}
+	return (0);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*s;
+	size_t	s1_len;
+	size_t	s2_len;
+
+	if (!s1 || !s2)
+		return (NULL);
+	s1_len = ft_strlen(s1);
+	s2_len = ft_strlen(s2);
+	s = malloc(sizeof(char) * (s1_len + s2_len + 1));
+	if (!s)
+		return (NULL);
+	ft_memcpy(s, s1, s1_len);
+	ft_memcpy(s + s1_len, s2, s2_len);
+	s[s1_len + s2_len] = '\0';
+	return (s);
+}
+
+void	parent_wait(int argc, pid_t *child)
+{
+	int		i;
+	int		status;
+
+	i = 0;
+	while (i < argc - 3)
+	{
+		waitpid(child[i], &status, 0);
+		i++;
+	}
 }

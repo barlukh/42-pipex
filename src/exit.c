@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:47:32 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/22 14:13:09 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/23 10:09:04 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,15 @@ int	print_user_errno(int err)
 	return (errno);
 }
 
-void	close_pipe(t_processes *prcs)
+void	free_split(char **arg)
 {
-	close(prcs->pipefd[0]);
-	close(prcs->pipefd[1]);
+	size_t	i;
+
+	i = 0;
+	while (arg[i] != NULL)
+	{
+		free(arg[i]);
+		i++;
+	}
+	free(arg);
 }

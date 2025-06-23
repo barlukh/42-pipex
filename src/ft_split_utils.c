@@ -6,14 +6,13 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:46:45 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/20 10:27:13 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/23 10:21:15 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
 static char	*ft_strdup(const char *s);
-static void	*ft_memcpy(void *dest, const void *src, size_t n);
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -66,6 +65,23 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (subs);
 }
 
+void	*ft_memcpy(void *dest, const void *src, size_t n)
+{
+	const unsigned char	*p_src;
+	unsigned char		*p_dest;
+	size_t				i;
+
+	p_dest = (unsigned char *)dest;
+	p_src = (const unsigned char *)src;
+	i = 0;
+	while (i < n)
+	{
+		p_dest[i] = p_src[i];
+		i++;
+	}
+	return (dest);
+}
+
 // Duplicates a string using dynamic memory allocation.
 static char	*ft_strdup(const char *s)
 {
@@ -81,22 +97,4 @@ static char	*ft_strdup(const char *s)
 	ft_memcpy(new_s, s, s_len);
 	new_s[s_len] = '\0';
 	return (new_s);
-}
-
-// Copies bytes from one memory area to another.
-static void	*ft_memcpy(void *dest, const void *src, size_t n)
-{
-	const unsigned char	*p_src;
-	unsigned char		*p_dest;
-	size_t				i;
-
-	p_dest = (unsigned char *)dest;
-	p_src = (const unsigned char *)src;
-	i = 0;
-	while (i < n)
-	{
-		p_dest[i] = p_src[i];
-		i++;
-	}
-	return (dest);
 }

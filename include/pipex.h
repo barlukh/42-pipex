@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 11:39:58 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/22 16:54:37 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/23 12:48:35 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@
 //------------------------------------------------------------------------------
 
 # define ERROR -1
-# define OFFSET 2
 
 //------------------------------------------------------------------------------
 // Type Definitions
@@ -45,55 +44,43 @@ typedef struct s_arguments
 {
 	int		argc;
 	char	**argv;
-	char	**env
+	char	**env;
 }	t_arguments;
-
-/** Variables for handling processes.
- * @param pipfd Pipe (pipefd[0] read end, pipefd[1] write end).
- * @param child Array of child processes.
- */
-typedef struct s_processes
-{
-	int		pipefd[2];
-	pid_t	*child;
-}	t_processes;
 
 //------------------------------------------------------------------------------
 // Function Prototypes
 //------------------------------------------------------------------------------
 
 /** Executes a command from the argument vector, replacing the child process.
- * @param args Command line arguments.
- * @param prcs Variables for handling processes.
- * @param i Index of a child process (argument).
- */
-int		child_execute(t_arguments args, t_processes *prcs, size_t i);
-
-/** Sets redirection of file descriptors for a child process.
- * @param argc Argument count.
  * @param argv Argument vector.
- * @param prcs Variables for handling processes.
+ * @param env Environmental variables.
  * @param i Index of a child process (argument).
  * @return EXIT_SUCCESS or EXIT_FAILURE.
  */
-int		child_set_fds(int argc, char **argv, t_processes *prcs, size_t i);
+int		child_execute(char **argv, char**env, int i);
 
-/** Closes both ends of a pipe.
- * @param prcs Variables for handling processes.
+/** Sets file descriptors for a child process.
+ * @param argc Argument count.
+ * @param argv Argument vector.
+ * @param pipefd Pipe (read end pipefd[0], write end pipefd[1]).
+ * @param i Index of a child process (argument).
+ * @return EXIT_SUCCESS or EXIT_FAILURE.
+ */
+int		child_set_fds(int argc, char **argv, int *pipefd, int i);
+
+/** Frees memory allocated by ft_split().
+ * @param arg Allocated array of strings.
  * @return None.
  */
-void	close_pipe(t_processes *prcs);
+void	free_split(char **arg);
 
-/** Prints an error message of the current errno.
- * @return Errno.
+/** Copies bytes from one memory area to another; the areas must not overlap.
+ * @param dest Pointer to the destination memory area.
+ * @param src Pointer to the source memory area..
+ * @param n Number of bytes to copy.
+ * @return Pointer to the destination memory area.
  */
-int		print_system_errno(void);
-
-/** Sets errno passed as an argument and prints its error message.
- * @param err Errno.
- * @return Errno.
- */
-int		print_user_errno(int err);
+void	*ft_memcpy(void *dest, const void *src, size_t n);
 
 /** Writes a string into a file descriptor followed by a newline character.
  * @param s String to write.
@@ -116,11 +103,26 @@ char	**ft_split(char const *s, char c);
  */
 char	*ft_strchr(const char *s, int c);
 
+/** Concatenates two strings using dynamic memory allocation.
+ * @param s1 First string.
+ * @param s2 Second string.
+ * @return Pointer to the new string, NULL if the allocation fails.
+ */
+char	*ft_strjoin(char const *s1, char const *s2);
+
 /** Calculates the length of a string.
  * @param s String to calculate the length of.
  * @return Number of bytes in the passed string.
  */
 size_t	ft_strlen(const char *s);
+
+/** Compares two strings.
+ * @param s1 First string.
+ * @param s2 Second string.
+ * @param n Number of bytes to compare.
+ * @return 0 if equal, negative if s1 < s2, positive if s1 > s2.
+ */
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
 /** Creates a substring using dynamic memory allocation.
  * @param s Source string for the substring.
@@ -129,5 +131,23 @@ size_t	ft_strlen(const char *s);
  * @return New substring, NULL if the allocation fails.
  */
 char	*ft_substr(char const *s, unsigned int start, size_t len);
+
+/** Waits for children processes to finish.
+ * @param argc Argument count.
+ * @param child Array of child processes.
+ * @return None.
+ */
+void	parent_wait(int argc, pid_t *child);
+
+/** Prints an error message of the current errno.
+ * @return Errno.
+ */
+int		print_system_errno(void);
+
+/** Sets errno passed as an argument and prints its error message.
+ * @param err Errno.
+ * @return Errno.
+ */
+int		print_user_errno(int err);
 
 #endif
