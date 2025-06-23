@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:49:15 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/23 12:45:48 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/23 13:10:50 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (s);
 }
 
-void	parent_wait(int argc, pid_t *child)
+int	parent_wait(int argc, pid_t *child)
 {
 	int		i;
-	int		status;
+	int 	status;
 
 	i = 0;
 	while (i < argc - 3)
@@ -75,4 +75,5 @@ void	parent_wait(int argc, pid_t *child)
 		waitpid(child[i], &status, 0);
 		i++;
 	}
+	return (status);
 }
