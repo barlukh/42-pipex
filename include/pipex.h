@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 11:39:58 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/23 13:14:35 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/24 09:54:45 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ int		child_execute(char **argv, char**env, int i);
  * @param argv Argument vector.
  * @param pipefd Pipe (read end pipefd[0], write end pipefd[1]).
  * @param i Index of a child process (argument).
- * @return EXIT_SUCCESS or EXIT_FAILURE.
+ * @return None.
  */
-int		child_set_fds(int argc, char **argv, int *pipefd, int i);
+void	child_set_fds(int argc, char **argv, int *pipefd, int i);
 
 /** Frees memory allocated by ft_split().
  * @param arr Allocated array of strings.
@@ -81,13 +81,6 @@ void	free_split(char **arr);
  * @return Pointer to the destination memory area.
  */
 void	*ft_memcpy(void *dest, const void *src, size_t n);
-
-/** Writes a string into a file descriptor followed by a newline character.
- * @param s String to write.
- * @param fd File descriptor.
- * @return Number of characters written, -1 on error.
- */
-int		ft_putstr(const char *s, int fd);
 
 /** Splits a string according to a specified delimiter.
  * @param s String to split.
@@ -139,15 +132,17 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
  */
 int		parent_wait(int argc, pid_t *child);
 
-/** Prints an error message of the current errno.
- * @return Errno.
+/** Customized perror() that prints an error message of the current errno.
+ * @param s Prefix for the error message.
+ * @return EXIT_FAILURE.
  */
-int		print_system_errno(void);
+int		print_system_errno(char *s);
 
-/** Sets errno passed as an argument and prints its error message.
+/** Customized perror() that sets an errno and prints its error message.
+ * @param s Prefix for the error message.
  * @param err Errno.
- * @return Errno.
+ * @return EXIT_FAILURE.
  */
-int		print_user_errno(int err);
+int		print_user_errno(char *s, int err);
 
 #endif

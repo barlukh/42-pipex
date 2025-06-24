@@ -6,13 +6,13 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:32:46 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/23 16:06:58 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/24 09:52:52 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-static char	*find_path(char *cmd, char **env);
+static char	*find_exec_path(char *cmd, char **env);
 static char	*check_env(char **env);
 static char	*build_path(char **paths_split, char *cmd);
 
@@ -23,19 +23,18 @@ int	child_execute(char **argv, char**env, int i)
 
 	arg = ft_split(argv[i + 2], ' ');
 	if (arg == NULL)
-		return (EXIT_FAILURE);
-	path = find_path(arg[0], env);
+		exit(print_user_errno("memory", 12));
+	path = find_exec_path(arg[0], env);
 	if (path == NULL)
 	{
 		free_split(arg);
-		return (EXIT_FAILURE);
+		exit(print_user_errno("memory", 12));
 	}
 	execve(path, arg, env);
-	return (EXIT_SUCCESS);
 }
 
 // Finds if the passed cmd has an executable path in env.
-static char	*find_path(char *cmd, char **env)
+static char	*find_exec_path(char *cmd, char **env)
 {
 	char	**paths_split;
 	char	*paths_all;

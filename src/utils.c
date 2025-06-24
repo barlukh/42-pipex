@@ -6,30 +6,11 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:49:15 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/23 13:10:50 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/24 09:50:24 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
-
-int	ft_putstr(const char *s, int fd)
-{
-	size_t	i;
-
-	if (!s)
-		s = "(null)";
-	i = 0;
-	while (s[i] != '\0')
-	{
-		if (write(fd, &s[i], 1) == ERROR)
-			return (ERROR);
-		i++;
-	}
-	if (write(1, "\n", 1) == ERROR)
-		return (ERROR);
-	i++;
-	return ((int)i);
-}
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
@@ -62,6 +43,19 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ft_memcpy(s + s1_len, s2, s2_len);
 	s[s1_len + s2_len] = '\0';
 	return (s);
+}
+
+void	free_split(char **arr)
+{
+	size_t	i;
+
+	i = 0;
+	while (arr[i] != NULL)
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
 }
 
 int	parent_wait(int argc, pid_t *child)

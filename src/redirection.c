@@ -6,32 +6,25 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:56:36 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/23 10:49:01 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/24 09:57:13 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-static int	child_first_set_fds(char **argv, int *pipefd);
-static int	child_last_set_fds(int argc, char **argv, int *pipefd);
+static void	child_first_set_fds(char **argv, int *pipefd);
+static void	child_last_set_fds(int argc, char **argv, int *pipefd);
 
-int	child_set_fds(int argc, char **argv, int *pipefd, int i)
+void	child_set_fds(int argc, char **argv, int *pipefd, int i)
 {
 	if (i == 0)
-	{
-		if (child_first_set_fds(argv, pipefd) == EXIT_FAILURE)
-			return (EXIT_FAILURE);
-	}
+		child_first_set_fds(argv, pipefd);
 	else if (i == argc - 4)
-	{
-		if (child_last_set_fds(argc, argv, pipefd) == EXIT_FAILURE)
-			return (EXIT_FAILURE);
-	}
-	return (EXIT_SUCCESS);
+		child_last_set_fds(argc, argv, pipefd);
 }
 
 // Sets file descriptors of the first child process (argument).
-static int	child_first_set_fds(char **argv, int *pipefd)
+static void	child_first_set_fds(char **argv, int *pipefd)
 {
 	int	fd;
 
@@ -40,22 +33,21 @@ static int	child_first_set_fds(char **argv, int *pipefd)
 	if (fd == ERROR)
 	{
 		close(pipefd[1]);
-		return (EXIT_FAILURE);
+		exit (print_system_errno(argv[1]));
 	}
 	if (dup2(fd, STDIN_FILENO) == ERROR
 		|| dup2(pipefd[1], STDOUT_FILENO) == ERROR)
 	{
 		close(pipefd[1]);
 		close(fd);
-		return (EXIT_FAILURE);
+		exit (print_system_errno("dup2"));
 	}
 	close(pipefd[1]);
 	close(fd);
-	return (EXIT_SUCCESS);
 }
 
 // Sets file descriptors of the last child process (argument).
-static int	child_last_set_fds(int argc, char **argv, int *pipefd)
+static void	child_last_set_fds(int argc, char **argv, int *pipefd)
 {
 	int	fd;
 
@@ -64,16 +56,16 @@ static int	child_last_set_fds(int argc, char **argv, int *pipefd)
 	if (fd == ERROR)
 	{
 		close(pipefd[0]);
-		return (EXIT_FAILURE);
+		print_system_errno(argv[argc - 1]);
+		exit (EXIT_FAILURE);
 	}
 	if (dup2(pipefd[0], STDIN_FILENO) == ERROR
 		|| dup2(fd, STDOUT_FILENO) == ERROR)
 	{
 		close(pipefd[0]);
 		close(fd);
-		return (EXIT_FAILURE);
+		exit (print_system_errno("dup2"));
 	}
 	close(pipefd[0]);
 	close(fd);
-	return (EXIT_SUCCESS);
 }
