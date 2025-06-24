@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:24:30 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/24 09:30:57 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/24 10:01:42 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,7 @@ int	main(int argc, char **argv, char **env)
 	if (argc != 5)
 		return (print_user_errno("arguments", 22));
 	if (pipe(pipefd) == ERROR)
-	{
-		print_system_errno("pipe");
-		return (EXIT_FAILURE);
-	}
+		return (print_system_errno("pipe"));
 	child = malloc(sizeof(pid_t) * (args.argc - 3));
 	if (child == NULL)
 		return (print_user_errno("memory", 12));
@@ -41,7 +38,7 @@ int	main(int argc, char **argv, char **env)
 	status = parent_wait(argc, child);
 	free(child);
 	if (WIFEXITED(status))
-    	return (WEXITSTATUS(status));
+		return (WEXITSTATUS(status));
 	return (EXIT_SUCCESS);
 }
 

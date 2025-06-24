@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:49:15 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/24 09:50:24 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/24 10:02:09 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ void	free_split(char **arr)
 
 int	parent_wait(int argc, pid_t *child)
 {
-	int		i;
-	int 	status;
+	int	i;
+	int	status;
 
 	i = 0;
 	while (i < argc - 3)
