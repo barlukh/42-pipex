@@ -6,7 +6,7 @@
 #    By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/18 11:37:07 by bgazur            #+#    #+#              #
-#    Updated: 2025/06/23 15:01:08 by bgazur           ###   ########.fr        #
+#    Updated: 2025/06/25 08:36:16 by bgazur           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ HDR_B =		$(INC_DIR)/pipex_bonus.h
 OBJ =		$(SRC:%.c=$(OBJ_DIR)/%.o)
 OBJ_B =		$(SRC_B:%.c=$(OBJ_DIR_B)/%.o)
 
-SRC =		exit.c \
+SRC =		errors.c \
 			execution.c \
 			ft_split_utils.c \
 			ft_split.c \
@@ -35,7 +35,7 @@ SRC =		exit.c \
 			redirection.c \
 			utils.c
 
-SRC_B =		exit.c \
+SRC_B =		errors.c \
 			execution.c \
 			ft_split_utils.c \
 			ft_split.c \

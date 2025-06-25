@@ -6,50 +6,56 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:32:46 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/24 09:52:52 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/25 09:35:39 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-static char	*find_exec_path(char *cmd, char **env);
-static char	*check_env(char **env);
-static char	*build_path(char **paths_split, char *cmd);
+static char	*find_exec_path(t_variables *var, char **cmd);
+static char	*check_env(t_variables *var, char **cmd);
+static char	*build_path(t_variables *var, char **cmd, char **paths_split);
 
-int	child_execute(char **argv, char**env, int i)
+void	child_execute(t_variables *var, int i)
 {
-	char	**arg;
+	char	**cmd;
 	char	*path;
 
-	arg = ft_split(argv[i + 2], ' ');
-	if (arg == NULL)
-		exit(print_user_errno("memory", 12));
-	path = find_exec_path(arg[0], env);
+	cmd = ft_split(var->argv[i + 2], ' ');
+	if (cmd == NULL)
+	{
+		free(var->child);
+		close_pipe(var);
+		exit(print_set_errno(BASH, "memory", 12, EXIT_FAILURE));
+	}
+	path = find_exec_path(var, cmd);
 	if (path == NULL)
 	{
-		free_split(arg);
-		exit(print_user_errno("memory", 12));
+		free_split(cmd);
+		free(var->child);
+		close_pipe(var);
+		exit(print_set_errno(BASH, "memory", 12, EXIT_FAILURE));
 	}
-	execve(path, arg, env);
+	execve(path, cmd, var->env);
 }
 
 // Finds if the passed cmd has an executable path in env.
-static char	*find_exec_path(char *cmd, char **env)
+static char	*find_exec_path(t_variables *var, char **cmd)
 {
 	char	**paths_split;
 	char	*paths_all;
 	char	*path_final;
 
-	if (ft_strchr(cmd, '/'))
-		return (cmd);
-	paths_all = check_env(env);
+	if (ft_strchr(cmd[0], '/'))
+		return (cmd[0]);
+	paths_all = check_env(var, cmd);
 	if (!paths_all)
 		return (NULL);
 	paths_split = ft_split(paths_all, ':');
 	free(paths_all);
 	if (!paths_split)
 		return (NULL);
-	path_final = build_path(paths_split, cmd);
+	path_final = build_path(var, cmd, paths_split);
 	free_split(paths_split);
 	if (!path_final)
 		return (NULL);
@@ -57,22 +63,32 @@ static char	*find_exec_path(char *cmd, char **env)
 }
 
 // Checks if PATH exists in env.
-static char	*check_env(char **env)
+static char	*check_env(t_variables *var, char **cmd)
 {
+	char	*subs;
 	size_t	i;
 
 	i = 0;
-	while (env[i] != NULL)
+	while (var->env[i] != NULL)
 	{
-		if (ft_strncmp(env[i], "PATH", 4) == 0)
-			return (ft_substr(env[i], 5, ft_strlen(env[i]) - 5));
+		if (ft_strncmp(var->env[i], "PATH=", 5) == 0)
+		{
+			subs = ft_substr(var->env[i], 6, ft_strlen(var->env[i]) - 5);
+			if (subs == NULL)
+				return (NULL);
+			return (subs);
+		}
 		i++;
 	}
-	return (NULL);
+	print_set_errno(BASH, cmd[0], 2, 127);
+	free_split(cmd);
+	free(var->child);
+	close_pipe(var);
+	exit(127);
 }
 
 // Builds the executable path and checks its access rights.
-static char	*build_path(char **paths_split, char *cmd)
+static char	*build_path(t_variables *var, char **cmd, char **paths_split)
 {
 	char	*temp;
 	char	*path_final;
@@ -84,7 +100,7 @@ static char	*build_path(char **paths_split, char *cmd)
 		temp = ft_strjoin(paths_split[i], "/");
 		if (!temp)
 			return (NULL);
-		path_final = ft_strjoin(temp, cmd);
+		path_final = ft_strjoin(temp, cmd[0]);
 		free(temp);
 		if (!path_final)
 			return (NULL);
@@ -94,5 +110,9 @@ static char	*build_path(char **paths_split, char *cmd)
 			free(path_final);
 		i++;
 	}
-	return (NULL);
+	print_custom_error(cmd[0], ": command not found\n", 127);
+	free_split(cmd);
+	free(var->child);
+	close_pipe(var);
+	exit(127);
 }

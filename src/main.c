@@ -6,57 +6,54 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:24:30 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/24 10:01:42 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/25 09:36:12 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-static void	fork_exec(t_arguments args, pid_t **child, int *pipefd);
+static void	fork_exec(t_variables *var);
 
 int	main(int argc, char **argv, char **env)
 {
-	int			pipefd[2];
 	int			status;
-	pid_t		*child;
-	t_arguments	args;
+	t_variables	var;
 
-	child = NULL;
-	args.argc = argc;
-	args.argv = argv;
-	args.env = env;
+	var.argc = argc;
+	var.argv = argv;
+	var.env = env;
 	if (argc != 5)
-		return (print_user_errno("arguments", 22));
-	if (pipe(pipefd) == ERROR)
-		return (print_system_errno("pipe"));
-	child = malloc(sizeof(pid_t) * (args.argc - 3));
-	if (child == NULL)
-		return (print_user_errno("memory", 12));
-	fork_exec(args, &child, pipefd);
-	close(pipefd[0]);
-	close(pipefd[1]);
-	status = parent_wait(argc, child);
-	free(child);
+		return (print_set_errno(BASH, "arguments", 22, EXIT_FAILURE));
+	if (pipe(var.pipefd) == ERROR)
+		return (print_system_errno(BASH, "pipe", EXIT_FAILURE));
+	var.child = malloc(sizeof(pid_t) * (var.argc - 3));
+	if (var.child == NULL)
+		return (print_set_errno(BASH, "memory", 12, EXIT_FAILURE));
+	fork_exec(&var);
+	close(var.pipefd[0]);
+	close(var.pipefd[1]);
+	status = parent_wait(var);
+	free(var.child);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (EXIT_SUCCESS);
 }
 
 // Main function for operating child processes.
-static void	fork_exec(t_arguments args, pid_t **child, int *pipefd)
+static void	fork_exec(t_variables *var)
 {
 	int	i;
 
 	i = 0;
-	while (i < args.argc - 3)
+	while (i < var->argc - 3)
 	{
-		(*child)[i] = fork();
-		if ((*child)[i] == (pid_t)(ERROR))
+		var->child[0] = fork();
+		if (var->child[0] == (pid_t)(ERROR))
 			return ;
-		else if ((*child)[i] == (pid_t)0)
+		else if (var->child[0] == (pid_t)0)
 		{
-			child_set_fds(args.argc, args.argv, pipefd, i);
-			child_execute(args.argv, args.env, i);
+			child_set_fds(var, i);
+			child_execute(var, i);
 		}
 		i++;
 	}

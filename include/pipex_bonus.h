@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 11:39:58 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/24 10:03:04 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/24 15:06:03 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@
  * @param argv Argument vector.
  * @param env Environmental variables.
  */
-typedef struct s_arguments
+typedef struct s_variables
 {
 	int		argc;
 	char	**argv;
 	char	**env;
-}	t_arguments;
+}	t_variables;
 
 //------------------------------------------------------------------------------
 // Function Prototypes

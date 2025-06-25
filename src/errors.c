@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:47:32 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/25 08:44:59 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/25 09:37:23 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	print_set_errno(int prefix_flag, char *s, int err, int status)
 	return (status);
 }
 
-void	print_custom_error(char *s1, char *s2, int status)
+int	print_custom_error(char *s1, char *s2, int status)
 {
 	char	*err_s;
 
@@ -57,4 +57,10 @@ void	print_custom_error(char *s1, char *s2, int status)
 	ft_putstr_fd(err_s, STDERR_FILENO);
 	free(err_s);
 	return (status);
+}
+
+void	close_pipe(t_variables *var)
+{
+	close(var->pipefd[0]);
+	close(var->pipefd[1]);
 }
