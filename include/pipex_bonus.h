@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 11:39:58 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/24 15:06:03 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/25 11:53:08 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,27 @@
 
 # define ERROR -1
 
+# define NO_PREFIX 0
+# define BASH 1
+
 //------------------------------------------------------------------------------
 // Type Definitions
 //------------------------------------------------------------------------------
 
-/** Command line arguments.
+/** Variables for the main operation of the program.
  * @param argc Argument count.
  * @param argv Argument vector.
  * @param env Environmental variables.
+ * @param pipefd Pipe (read end pipefd[0], write end pipefd[1]).
+ * @param child Array of children process IDs.
  */
 typedef struct s_variables
 {
 	int		argc;
 	char	**argv;
 	char	**env;
+	int		pipefd[2];
+	pid_t	*child;
 }	t_variables;
 
 //------------------------------------------------------------------------------
@@ -52,21 +59,30 @@ typedef struct s_variables
 //------------------------------------------------------------------------------
 
 /** Executes a command from the argument vector, replacing the child process.
- * @param argv Argument vector.
- * @param env Environmental variables.
- * @param i Index of a child process (argument).
- * @return EXIT_SUCCESS or EXIT_FAILURE.
- */
-int		child_execute(char **argv, char**env, int i);
-
-/** Sets file descriptors for a child process.
- * @param argc Argument count.
- * @param argv Argument vector.
- * @param pipefd Pipe (read end pipefd[0], write end pipefd[1]).
+ * @param var Variables for the main operation of the program.
  * @param i Index of a child process (argument).
  * @return None.
  */
-void	child_set_fds(int argc, char **argv, int *pipefd, int i);
+void	child_execute(t_variables *var, int i);
+
+/** Sets file descriptors for a child process.
+ * @param var Variables for the main operation of the program.
+ * @param i Index of a child process (argument).
+ * @return None.
+ */
+void	child_set_fds(t_variables *var, int i);
+
+/** Closes both ends of a pipe and frees a child array.
+ * @param var Variables for the main operation of the program.
+ * @return None.
+ */
+void	clean_struct(t_variables *var);
+
+/** Closes both ends of a pipe.
+ * @param var Variables for the main operation of the program.
+ * @return None.
+ */
+void	close_pipe(t_variables *var);
 
 /** Frees memory allocated by ft_split().
  * @param arr Allocated array of strings.
@@ -81,6 +97,13 @@ void	free_split(char **arr);
  * @return Pointer to the destination memory area.
  */
 void	*ft_memcpy(void *dest, const void *src, size_t n);
+
+/** Outputs a string to a specified file descriptor
+ * @param s String to output
+ * @param fd File descriptor
+ * @return None
+ */
+void	ft_putstr_fd(char *s, int fd);
 
 /** Splits a string according to a specified delimiter.
  * @param s String to split.
@@ -126,23 +149,34 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 
 /** Waits for children processes to finish.
- * @param argc Argument count.
- * @param child Array of child processes.
+ * @param var Variables for the main operation of the program.
  * @return Termination status of the last process.
  */
-int		parent_wait(int argc, pid_t *child);
+int		parent_wait(t_variables var);
 
-/** Customized perror() that prints an error message of the current errno.
- * @param s Prefix for the error message.
- * @return EXIT_FAILURE.
+/** Prints a custom error message.
+ * @param s1 First string.
+ * @param s2 Second string.
+ * @param status Exit status.
+ * @return Exit status.
  */
-int		print_system_errno(char *s);
+int		print_custom_error(char *s1, char *s2, int status);
 
-/** Customized perror() that sets an errno and prints its error message.
- * @param s Prefix for the error message.
+/** Sets errno and prints its error message.
+ * @param prefix_flag Flag to signal the usage of shell prefix_flag.
+ * @param s Custom string addition to the error message.
  * @param err Errno.
- * @return EXIT_FAILURE.
+ * @param status Exit status.
+ * @return Exit status.
  */
-int		print_user_errno(char *s, int err);
+int		print_set_errno(int prefix_flag, char *s, int err, int status);
+
+/** Prints an error message of the current errno.
+ * @param prefix_flag Flag to signal the usage of shell prefix_flag.
+ * @param s Custom string addition to the error message.
+ * @param status Exit status.
+ * @return Exit status.
+ */
+int		print_system_errno(int prefix_flag, char *s, int status);
 
 #endif

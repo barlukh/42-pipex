@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:24:30 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/25 11:40:52 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/25 17:27:06 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	main(int argc, char **argv, char **env)
 	return (EXIT_SUCCESS);
 }
 
-// Main function for operating child processes.
+// Forks and executes child processes.
 static void	fork_exec(t_variables *var)
 {
 	int	i;

@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 11:39:58 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/25 11:27:17 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/25 17:12:23 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@
  * @param env Environmental variables.
  * @param pipefd Pipe (read end pipefd[0], write end pipefd[1]).
  * @param child Array of children process IDs.
+ * @param cmd Passed command from the command line.
+ * @param path Executable path of the command.
  */
 typedef struct s_variables
 {
@@ -52,6 +54,8 @@ typedef struct s_variables
 	char	**env;
 	int		pipefd[2];
 	pid_t	*child;
+	char	**cmd;
+	char	*path;
 }	t_variables;
 
 //------------------------------------------------------------------------------

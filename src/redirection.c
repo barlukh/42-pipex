@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:56:36 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/25 10:23:25 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/25 17:25:24 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	child_first_set_fds(t_variables *var)
 	{
 		close(var->pipefd[1]);
 		free(var->child);
-		exit (print_system_errno(BASH, var->argv[1], EXIT_FAILURE));
+		exit(print_system_errno(BASH, var->argv[1], EXIT_FAILURE));
 	}
 	if (dup2(fd, STDIN_FILENO) == ERROR
 		|| dup2(var->pipefd[1], STDOUT_FILENO) == ERROR)
@@ -42,7 +42,7 @@ static void	child_first_set_fds(t_variables *var)
 		close(fd);
 		close(var->pipefd[1]);
 		free(var->child);
-		exit (print_system_errno(BASH, "dup2", EXIT_FAILURE));
+		exit(print_system_errno(BASH, "dup2", EXIT_FAILURE));
 	}
 	close(var->pipefd[1]);
 	close(fd);
@@ -59,7 +59,7 @@ static void	child_last_set_fds(t_variables *var)
 	{
 		close(var->pipefd[0]);
 		free(var->child);
-		exit (print_system_errno(BASH, var->argv[var->argc - 1], EXIT_FAILURE));
+		exit(print_system_errno(BASH, var->argv[var->argc - 1], EXIT_FAILURE));
 	}
 	if (dup2(var->pipefd[0], STDIN_FILENO) == ERROR
 		|| dup2(fd, STDOUT_FILENO) == ERROR)
@@ -67,7 +67,7 @@ static void	child_last_set_fds(t_variables *var)
 		close(fd);
 		close(var->pipefd[0]);
 		free(var->child);
-		exit (print_system_errno(BASH, "dup2", EXIT_FAILURE));
+		exit(print_system_errno(BASH, "dup2", EXIT_FAILURE));
 	}
 	close(var->pipefd[0]);
 	close(fd);
