@@ -6,66 +6,69 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:56:36 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/24 09:57:13 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/25 08:58:46 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-static void	child_first_set_fds(char **argv, int *pipefd);
-static void	child_last_set_fds(int argc, char **argv, int *pipefd);
+static void	child_first_set_fds(t_variables *var);
+static void	child_last_set_fds(t_variables *var);
 
-void	child_set_fds(int argc, char **argv, int *pipefd, int i)
+void	child_set_fds(t_variables *var, int i)
 {
 	if (i == 0)
-		child_first_set_fds(argv, pipefd);
-	else if (i == argc - 4)
-		child_last_set_fds(argc, argv, pipefd);
+		child_first_set_fds(var);
+	else if (i == var->argc - 4)
+		child_last_set_fds(var);
 }
 
 // Sets file descriptors of the first child process (argument).
-static void	child_first_set_fds(char **argv, int *pipefd)
+static void	child_first_set_fds(t_variables *var)
 {
 	int	fd;
 
-	close(pipefd[0]);
-	fd = open(argv[1], O_RDONLY);
+	close(var->pipefd[0]);
+	fd = open(var->argv[1], O_RDONLY);
 	if (fd == ERROR)
 	{
-		close(pipefd[1]);
-		exit (print_system_errno(argv[1]));
+		close(var->pipefd[1]);
+		free(var->child);
+		exit (print_system_errno(BASH, var->argv[1], EXIT_FAILURE));
 	}
 	if (dup2(fd, STDIN_FILENO) == ERROR
-		|| dup2(pipefd[1], STDOUT_FILENO) == ERROR)
+		|| dup2(var->pipefd[1], STDOUT_FILENO) == ERROR)
 	{
-		close(pipefd[1]);
 		close(fd);
-		exit (print_system_errno("dup2"));
+		close(var->pipefd[1]);
+		free(var->child);
+		exit (print_system_errno(BASH, "dup2", EXIT_FAILURE));
 	}
-	close(pipefd[1]);
+	close(var->pipefd[1]);
 	close(fd);
 }
 
 // Sets file descriptors of the last child process (argument).
-static void	child_last_set_fds(int argc, char **argv, int *pipefd)
+static void	child_last_set_fds(t_variables *var)
 {
 	int	fd;
 
-	close(pipefd[1]);
-	fd = open(argv[argc - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	close(var->pipefd[1]);
+	fd = open(var->argv[var->argc - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd == ERROR)
 	{
-		close(pipefd[0]);
-		print_system_errno(argv[argc - 1]);
-		exit (EXIT_FAILURE);
+		close(var->pipefd[0]);
+		free(var->child);
+		exit (print_system_errno(BASH, var->argv[var->argc - 1], EXIT_FAILURE));
 	}
-	if (dup2(pipefd[0], STDIN_FILENO) == ERROR
+	if (dup2(var->pipefd[0], STDIN_FILENO) == ERROR
 		|| dup2(fd, STDOUT_FILENO) == ERROR)
 	{
-		close(pipefd[0]);
 		close(fd);
-		exit (print_system_errno("dup2"));
+		close(var->pipefd[0]);
+		free(var->child);
+		exit (print_system_errno(BASH, "dup2", EXIT_FAILURE));
 	}
-	close(pipefd[0]);
+	close(var->pipefd[0]);
 	close(fd);
 }
