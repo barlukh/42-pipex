@@ -6,11 +6,18 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:49:15 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/24 10:02:09 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/25 07:42:00 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	if (!s)
+		return ;
+	write(fd, s, ft_strlen(s));
+}
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
@@ -58,15 +65,15 @@ void	free_split(char **arr)
 	free(arr);
 }
 
-int	parent_wait(int argc, pid_t *child)
+int	parent_wait(t_variables var)
 {
 	int	i;
 	int	status;
 
 	i = 0;
-	while (i < argc - 3)
+	while (i < var.argc - 3)
 	{
-		waitpid(child[i], &status, 0);
+		waitpid(var.child[i], &status, 0);
 		i++;
 	}
 	return (status);
