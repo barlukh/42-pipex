@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:24:30 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/25 09:36:12 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/25 10:40:51 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ int	main(int argc, char **argv, char **env)
 	if (var.child == NULL)
 		return (print_set_errno(BASH, "memory", 12, EXIT_FAILURE));
 	fork_exec(&var);
-	close(var.pipefd[0]);
-	close(var.pipefd[1]);
+	close_pipe(&var);
 	status = parent_wait(var);
 	free(var.child);
 	if (WIFEXITED(status))
@@ -47,10 +46,10 @@ static void	fork_exec(t_variables *var)
 	i = 0;
 	while (i < var->argc - 3)
 	{
-		var->child[0] = fork();
-		if (var->child[0] == (pid_t)(ERROR))
+		var->child[i] = fork();
+		if (var->child[i] == (pid_t)(ERROR))
 			return ;
-		else if (var->child[0] == (pid_t)0)
+		else if (var->child[i] == (pid_t)0)
 		{
 			child_set_fds(var, i);
 			child_execute(var, i);
