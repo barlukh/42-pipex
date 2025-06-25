@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:47:32 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/25 09:37:23 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/25 11:28:18 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,10 @@ void	close_pipe(t_variables *var)
 {
 	close(var->pipefd[0]);
 	close(var->pipefd[1]);
+}
+
+void	clean_struct(t_variables *var)
+{
+	close_pipe(var);
+	free(var->child);
 }

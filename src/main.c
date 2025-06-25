@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:24:30 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/25 10:40:51 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/25 11:40:52 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ int	main(int argc, char **argv, char **env)
 		return (print_system_errno(BASH, "pipe", EXIT_FAILURE));
 	var.child = malloc(sizeof(pid_t) * (var.argc - 3));
 	if (var.child == NULL)
+	{
+		close_pipe(&var);
 		return (print_set_errno(BASH, "memory", 12, EXIT_FAILURE));
+	}
 	fork_exec(&var);
 	close_pipe(&var);
 	status = parent_wait(var);

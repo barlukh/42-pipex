@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 11:39:58 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/25 10:27:45 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/25 11:27:17 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,12 @@ void	child_execute(t_variables *var, int i);
  * @return None.
  */
 void	child_set_fds(t_variables *var, int i);
+
+/** Closes both ends of a pipe and frees a child array.
+ * @param var Variables for the main operation of the program.
+ * @return None.
+ */
+void	clean_struct(t_variables *var);
 
 /** Closes both ends of a pipe.
  * @param var Variables for the main operation of the program.

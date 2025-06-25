@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:32:46 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/25 10:34:15 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/25 11:29:24 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,14 @@ void	child_execute(t_variables *var, int i)
 	cmd = ft_split(var->argv[i + 2], ' ');
 	if (cmd == NULL)
 	{
-		free(var->child);
-		close_pipe(var);
+		clean_struct(var);
 		exit(print_set_errno(BASH, "memory", 12, EXIT_FAILURE));
 	}
 	path = find_exec_path(var, cmd);
 	if (path == NULL)
 	{
 		free_split(cmd);
-		free(var->child);
-		close_pipe(var);
+		clean_struct(var);
 		exit(print_set_errno(BASH, "memory", 12, EXIT_FAILURE));
 	}
 	execve(path, cmd, var->env);
@@ -82,8 +80,7 @@ static char	*check_env(t_variables *var, char **cmd)
 	}
 	print_set_errno(BASH, cmd[0], 2, 127);
 	free_split(cmd);
-	free(var->child);
-	close_pipe(var);
+	clean_struct(var);
 	exit(127);
 }
 
@@ -112,7 +109,7 @@ static char	*build_path(t_variables *var, char **cmd, char **paths_split)
 	}
 	print_custom_error(cmd[0], ": command not found\n", 127);
 	free_split(cmd);
-	free(var->child);
-	close_pipe(var);
+	free_split(paths_split);
+	clean_struct(var);
 	exit(127);
 }
