@@ -6,7 +6,7 @@
 #    By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/18 11:37:07 by bgazur            #+#    #+#              #
-#    Updated: 2025/06/25 08:36:16 by bgazur           ###   ########.fr        #
+#    Updated: 2025/06/26 09:34:57 by bgazur           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,8 +39,8 @@ SRC_B =		errors.c \
 			execution.c \
 			ft_split_utils.c \
 			ft_split.c \
-			main.c \
-			redirection.c \
+			main_bonus.c \
+			redirection_bonus.c \
 			utils.c
 
 $(NAME): $(OBJ_DIR) $(OBJ)
