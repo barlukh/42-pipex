@@ -6,25 +6,20 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:32:46 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/26 07:25:11 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/26 08:58:09 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
+static void	check_invalids(t_variables *var, int i);
 static char	*find_exec_path(t_variables *var);
 static char	*check_env(t_variables *var);
 static char	*build_path(t_variables *var, char **paths_split);
 
 void	child_execute(t_variables *var, int i)
 {
-	while (var->argv[i + 2][var->offset] == ' ')
-		var->offset++;
-	if (var->argv[i + 2][var->offset] == '\0')
-	{
-		clean_struct(var);
-		exit(0);
-	}
+	check_invalids(var, i);
 	var->cmd = ft_split(var->argv[i + 2], ' ');
 	if (var->cmd == NULL)
 	{
@@ -43,6 +38,30 @@ void	child_execute(t_variables *var, int i)
 	free_split(var->cmd);
 	clean_struct(var);
 	exit(127);
+}
+
+// Checks if the passed command is a directory or an empty string.
+static void	check_invalids(t_variables *var, int i)
+{
+	int	offset;
+	int	fd;
+
+	offset = 0;
+	while (var->argv[i + 2][offset] == ' ')
+		offset++;
+	if (var->argv[i + 2][offset] == '\0')
+	{
+		clean_struct(var);
+		exit(0);
+	}
+	fd = open(var->argv[i + 2], O_RDONLY | __O_DIRECTORY);
+	if (fd != ERROR)
+	{
+		print_set_errno(var->argv[i + 2], 21, 126);
+		clean_struct(var);
+		close(fd);
+		exit(126);
+	}
 }
 
 // Finds if the passed command has an executable path in env.

@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 11:39:58 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/26 07:24:05 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/26 08:21:58 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@
  * @param child Array of children process IDs.
  * @param cmd Passed command from the command line.
  * @param path Executable path of the command.
- * @param offset Offset value used for traversing input command characters.
  */
 typedef struct s_variables
 {
@@ -53,7 +52,6 @@ typedef struct s_variables
 	pid_t	*child;
 	char	**cmd;
 	char	*path;
-	int		offset;
 }	t_variables;
 
 //------------------------------------------------------------------------------

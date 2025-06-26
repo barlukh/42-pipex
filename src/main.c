@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:24:30 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/26 07:25:24 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/26 08:21:46 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int	main(int argc, char **argv, char **env)
 	var.argc = argc;
 	var.argv = argv;
 	var.env = env;
-	var.offset = 0;
 	if (argc != 5)
 		return (print_set_errno("arguments", 22, EXIT_FAILURE));
 	if (pipe(var.pipefd) == ERROR)
