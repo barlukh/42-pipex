@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:24:30 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/25 17:27:06 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/26 07:25:24 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,16 @@ int	main(int argc, char **argv, char **env)
 	var.argc = argc;
 	var.argv = argv;
 	var.env = env;
+	var.offset = 0;
 	if (argc != 5)
-		return (print_set_errno(BASH, "arguments", 22, EXIT_FAILURE));
+		return (print_set_errno("arguments", 22, EXIT_FAILURE));
 	if (pipe(var.pipefd) == ERROR)
-		return (print_system_errno(BASH, "pipe", EXIT_FAILURE));
+		return (print_system_errno("pipe", EXIT_FAILURE));
 	var.child = malloc(sizeof(pid_t) * (var.argc - 3));
 	if (var.child == NULL)
 	{
 		close_pipe(&var);
-		return (print_set_errno(BASH, "memory", 12, EXIT_FAILURE));
+		return (print_set_errno("memory", 12, EXIT_FAILURE));
 	}
 	fork_exec(&var);
 	close_pipe(&var);

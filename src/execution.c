@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:32:46 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/25 17:25:13 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/06/26 07:25:11 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,9 @@ static char	*build_path(t_variables *var, char **paths_split);
 
 void	child_execute(t_variables *var, int i)
 {
-	int	offset;
-
-	offset = 0;
-	while (var->argv[i + 2][offset] == ' ')
-		offset++;
-	if (var->argv[i + 2][offset] == '\0')
+	while (var->argv[i + 2][var->offset] == ' ')
+		var->offset++;
+	if (var->argv[i + 2][var->offset] == '\0')
 	{
 		clean_struct(var);
 		exit(0);
@@ -32,17 +29,20 @@ void	child_execute(t_variables *var, int i)
 	if (var->cmd == NULL)
 	{
 		clean_struct(var);
-		exit(print_set_errno(BASH, "memory", 12, EXIT_FAILURE));
+		exit(print_set_errno("memory", 12, EXIT_FAILURE));
 	}
 	var->path = find_exec_path(var);
 	if (var->path == NULL)
 	{
 		free_split(var->cmd);
 		clean_struct(var);
-		exit(print_set_errno(BASH, "memory", 12, EXIT_FAILURE));
+		exit(print_set_errno("memory", 12, EXIT_FAILURE));
 	}
-	if (execve(var->path, var->cmd, var->env) == -1)
-		exit(print_system_errno(BASH, "execve", EXIT_FAILURE));
+	execve(var->path, var->cmd, var->env);
+	print_system_errno(var->cmd[0], 127);
+	free_split(var->cmd);
+	clean_struct(var);
+	exit(127);
 }
 
 // Finds if the passed command has an executable path in env.
@@ -86,7 +86,7 @@ static char	*check_env(t_variables *var)
 		}
 		i++;
 	}
-	print_set_errno(BASH, var->cmd[0], 2, 127);
+	print_set_errno(var->cmd[0], 2, 127);
 	free_split(var->cmd);
 	clean_struct(var);
 	exit(127);
