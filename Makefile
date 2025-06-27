@@ -6,26 +6,22 @@
 #    By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/18 11:37:07 by bgazur            #+#    #+#              #
-#    Updated: 2025/06/26 09:34:57 by bgazur           ###   ########.fr        #
+#    Updated: 2025/06/27 09:43:09 by bgazur           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME =		pipex
-BONUS =		pipex_bonus
 CC =		cc
 CFLAGS =	-Wall -Werror -Wextra
 RM =		rm -f
 
 INC_DIR =	include
 OBJ_DIR =	objects
-OBJ_DIR_B =	objects_b
 SRC_DIR =	src
 
 HDR =		$(INC_DIR)/pipex.h
-HDR_B =		$(INC_DIR)/pipex_bonus.h
 
 OBJ =		$(SRC:%.c=$(OBJ_DIR)/%.o)
-OBJ_B =		$(SRC_B:%.c=$(OBJ_DIR_B)/%.o)
 
 SRC =		errors.c \
 			execution.c \
@@ -35,42 +31,23 @@ SRC =		errors.c \
 			redirection.c \
 			utils.c
 
-SRC_B =		errors.c \
-			execution.c \
-			ft_split_utils.c \
-			ft_split.c \
-			main_bonus.c \
-			redirection_bonus.c \
-			utils.c
-
 $(NAME): $(OBJ_DIR) $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
-
-$(BONUS): $(OBJ_DIR_B) $(OBJ_B)
-	$(CC) $(CFLAGS) $(OBJ_B) -o $(BONUS)
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
-$(OBJ_DIR_B):
-	mkdir -p $(OBJ_DIR_B)
-
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HDR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJ_DIR_B)/%.o: $(SRC_DIR)/%.c $(HDR) $(HDR_B)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-all: $(OBJ_DIR) $(OBJ_DIR_B) $(NAME) $(BONUS)
-
-bonus: $(OBJ_DIR_B) $(BONUS)
+all: $(OBJ_DIR) $(NAME)
 
 clean:
-	$(RM) $(OBJ) $(OBJ_B)
+	$(RM) $(OBJ)
 
 fclean: clean
-	$(RM) $(NAME) $(BONUS)
+	$(RM) $(NAME)
 
 re: fclean all
 
-.PHONY: all bonus clean fclean re
+.PHONY: all clean fclean re
